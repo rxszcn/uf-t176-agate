@@ -6,7 +6,8 @@ from agate.table import Table
 
 
 @classmethod
-def from_csv(cls, dir_path, column_names=None, column_types=None, row_names=None, header=True, **kwargs):
+def from_csv(cls, dir_path, column_names=None, column_types=None, row_names=None, header=True, encoding='utf-8',
+             **kwargs):
     """
     Create a new :class:`TableSet` from a directory of CSVs.
 
@@ -23,6 +24,9 @@ def from_csv(cls, dir_path, column_names=None, column_types=None, row_names=None
         See :meth:`Table.__init__`.
     :param header:
         See :meth:`Table.from_csv`.
+    :param encoding:
+        Character encoding of the CSV files. Defaults to ``'utf-8'``,
+        matching :meth:`.Table.from_csv`.
     """
     from agate.tableset import TableSet
 
@@ -34,6 +38,7 @@ def from_csv(cls, dir_path, column_names=None, column_types=None, row_names=None
     for path in glob(os.path.join(dir_path, '*.csv')):
         name = os.path.split(path)[1].strip('.csv')
 
-        tables[name] = Table.from_csv(path, column_names, column_types, row_names=row_names, header=header, **kwargs)
+        tables[name] = Table.from_csv(path, column_names, column_types, row_names=row_names, header=header,
+                                      encoding=encoding, **kwargs)
 
     return TableSet(tables.values(), tables.keys())

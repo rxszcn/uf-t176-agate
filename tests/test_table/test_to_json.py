@@ -33,7 +33,7 @@ class TestJSON(AgateTestCase):
 
         js1 = json.loads(output.getvalue())
 
-        with open('examples/test.json') as f:
+        with open('examples/test.json', encoding='utf-8') as f:
             js2 = json.load(f)
 
         self.assertEqual(js1, js2)
@@ -46,7 +46,7 @@ class TestJSON(AgateTestCase):
 
         js1 = json.loads(output.getvalue())
 
-        with open('examples/test_keyed.json') as f:
+        with open('examples/test_keyed.json', encoding='utf-8') as f:
             js2 = json.load(f)
 
         self.assertEqual(js1, js2)
@@ -59,7 +59,7 @@ class TestJSON(AgateTestCase):
 
         js1 = json.loads(output.getvalue())
 
-        with open('examples/test_non_string_keyed.json') as f:
+        with open('examples/test_non_string_keyed.json', encoding='utf-8') as f:
             js2 = json.load(f)
 
         self.assertEqual(js1, js2)
@@ -82,7 +82,7 @@ class TestJSON(AgateTestCase):
 
         js1 = json.loads(output.getvalue())
 
-        with open('examples/test_keyed.json') as f:
+        with open('examples/test_keyed.json', encoding='utf-8') as f:
             js2 = json.load(f)
 
         self.assertEqual(js1, js2)
@@ -95,7 +95,7 @@ class TestJSON(AgateTestCase):
 
         js1 = json.loads(output.getvalue().split('\n')[0])
 
-        with open('examples/test_newline.json') as f:
+        with open('examples/test_newline.json', encoding='utf-8') as f:
             js2 = json.loads(list(f)[0])
 
         self.assertEqual(js1, js2)
@@ -121,10 +121,10 @@ class TestJSON(AgateTestCase):
 
         table.to_json('.test.json')
 
-        with open('.test.json') as f1:
+        with open('.test.json', encoding='utf-8') as f1:
             js1 = json.load(f1)
 
-        with open('examples/test.json') as f2:
+        with open('examples/test.json', encoding='utf-8') as f2:
             js2 = json.load(f2)
 
         self.assertEqual(js1, js2)
@@ -136,10 +136,10 @@ class TestJSON(AgateTestCase):
 
         table.to_json('newdir/test.json')
 
-        with open('newdir/test.json') as f1:
+        with open('newdir/test.json', encoding='utf-8') as f1:
             js1 = json.load(f1)
 
-        with open('examples/test.json') as f2:
+        with open('examples/test.json', encoding='utf-8') as f2:
             js2 = json.load(f2)
 
         self.assertEqual(js1, js2)
@@ -158,7 +158,7 @@ class TestJSON(AgateTestCase):
 
             js1 = json.loads(sys.stdout.getvalue())
 
-            with open('examples/test.json') as f:
+            with open('examples/test.json', encoding='utf-8') as f:
                 js2 = json.load(f)
 
             self.assertEqual(js1, js2)

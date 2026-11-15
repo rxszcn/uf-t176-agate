@@ -1,6 +1,9 @@
 1.14.3 - Unreleased
 -------------------
 
+- fix: :meth:`.Table.to_csv`, :meth:`.Table.to_json`, :meth:`.TableSet.to_csv` and :meth:`.TableSet.to_json` now accept an ``encoding`` argument and write UTF-8 by default, instead of relying on the platform's preferred encoding (which raised ``UnicodeEncodeError`` or broke round trips for non-ASCII content on Windows). Pass ``encoding=None`` to restore the previous platform-default behavior. Filepath writes are now atomic: a failed write raises :class:`.FileWriteError` naming the target path and encoding and never leaves a truncated file.
+- fix: :meth:`.TableSet.from_json` now opens nested JSON files with an explicit, configurable ``encoding`` (default UTF-8) instead of the platform's preferred encoding.
+- feat: :meth:`.TableSet.from_csv` now exposes an explicit ``encoding`` argument (default UTF-8) that is passed through to each :meth:`.Table.from_csv` call.
 - feat: :class:`.Median`, :class:`.Percentiles`, :class:`.Quartiles`, :class:`.Quintiles`, :class:`.Deciles` and :class:`.IQR` can be applied to :class:`.TimeDelta` columns, like :class:`.Sum` and :class:`.Mean`.
 - fix: :meth:`.Table.distinct` now deduplicates rows when ``key`` is a sequence of column names.
 - fix: :class:`.Rank` ranks null values last when ``reverse=True``.

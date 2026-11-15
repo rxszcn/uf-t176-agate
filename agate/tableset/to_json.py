@@ -4,7 +4,7 @@ from collections import OrderedDict
 from io import StringIO
 
 
-def to_json(self, path, nested=False, indent=None, **kwargs):
+def to_json(self, path, nested=False, indent=None, encoding='utf-8', **kwargs):
     """
     Write :class:`TableSet` to either a set of JSON files for each table or
     a single nested JSON file.
@@ -20,7 +20,13 @@ def to_json(self, path, nested=False, indent=None, **kwargs):
         will be a set of files for each table. Defaults to `False`.
     :param indent:
         See :meth:`Table.to_json`.
+    :param encoding:
+        Character encoding used when writing to a filepath. Defaults to
+        ``'utf-8'``; pass :code:`None` to use the platform's preferred
+        encoding. Ignored when ``path`` is a file-like object.
     """
+    from agate.fileio import atomic_open
+
     if not nested:
         if not os.path.exists(path):
             os.makedirs(path)
@@ -28,9 +34,8 @@ def to_json(self, path, nested=False, indent=None, **kwargs):
         for name, table in self.items():
             filepath = os.path.join(path, '%s.json' % name)
 
-            table.to_json(filepath, indent=indent, **kwargs)
+            table.to_json(filepath, indent=indent, encoding=encoding, **kwargs)
     else:
-        close = True
         tableset_dict = OrderedDict()
 
         for name, table in self.items():
@@ -39,20 +44,17 @@ def to_json(self, path, nested=False, indent=None, **kwargs):
             tableset_dict[name] = json.loads(output.getvalue(), object_pairs_hook=OrderedDict)
 
         if hasattr(path, 'write'):
-            f = path
-            close = False
+            _dump_nested(tableset_dict, path, indent, **kwargs)
         else:
-            dirpath = os.path.dirname(path)
+            # atomic_open replaces the destination only after the full content
+            # has been written and flushed, so a failed write never leaves a
+            # partial file.
+            with atomic_open(path, encoding=encoding) as f:
+                _dump_nested(tableset_dict, f, indent, **kwargs)
 
-            if dirpath and not os.path.exists(dirpath):
-                os.makedirs(dirpath)
 
-            f = open(path, 'w')
+def _dump_nested(tableset_dict, f, indent, **kwargs):
+    json_kwargs = {'ensure_ascii': False, 'indent': indent}
 
-        json_kwargs = {'ensure_ascii': False, 'indent': indent}
-
-        json_kwargs.update(kwargs)
-        json.dump(tableset_dict, f, **json_kwargs)
-
-        if close and f is not None:
-            f.close()
+    json_kwargs.update(kwargs)
+    json.dump(tableset_dict, f, **json_kwargs)

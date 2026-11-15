@@ -8,7 +8,7 @@ from agate.table import Table
 
 
 @classmethod
-def from_json(cls, path, column_names=None, column_types=None, keys=None, **kwargs):
+def from_json(cls, path, column_names=None, column_types=None, keys=None, encoding='utf-8', **kwargs):
     """
     Create a new :class:`TableSet` from a directory of JSON files or a
     single JSON object with key value (Table key and list of row objects)
@@ -24,6 +24,10 @@ def from_json(cls, path, column_names=None, column_types=None, keys=None, **kwar
         specified, length must be equal to number of JSON files in path.
     :param column_types:
         See :meth:`Table.__init__`.
+    :param encoding:
+        Character encoding of the JSON file when ``path`` is a filepath.
+        Defaults to ``'utf-8'``, matching :meth:`.Table.from_json`. Ignored
+        when ``path`` is a file-like object.
     """
     from agate.tableset import TableSet
 
@@ -42,15 +46,17 @@ def from_json(cls, path, column_names=None, column_types=None, keys=None, **kwar
             name = os.path.split(filepath)[1].strip('.json')
 
             if keys is not None:
-                tables[name] = Table.from_json(filepath, keys[i], column_types=column_types, **kwargs)
+                tables[name] = Table.from_json(filepath, keys[i], column_types=column_types,
+                                               encoding=encoding, **kwargs)
             else:
-                tables[name] = Table.from_json(filepath, column_types=column_types, **kwargs)
+                tables[name] = Table.from_json(filepath, column_types=column_types,
+                                               encoding=encoding, **kwargs)
 
     else:
         if hasattr(path, 'read'):
             js = json.load(path, object_pairs_hook=OrderedDict, parse_float=Decimal, **kwargs)
         else:
-            with open(path) as f:
+            with open(path, encoding=encoding) as f:
                 js = json.load(f, object_pairs_hook=OrderedDict, parse_float=Decimal, **kwargs)
 
         for key, value in js.items():

@@ -29,10 +29,10 @@ class TestToCSV(AgateTestCase):
 
         table.to_csv('.test.csv', quoting=csv.QUOTE_NONNUMERIC)
 
-        with open('.test.csv') as f:
+        with open('.test.csv', encoding='utf-8') as f:
             contents1 = f.read()
 
-        with open('examples/test_quote_nonnumeric.csv') as f:
+        with open('examples/test_quote_nonnumeric.csv', encoding='utf-8') as f:
             contents2 = f.read()
 
         self.assertEqual(contents1, contents2)
@@ -44,10 +44,10 @@ class TestToCSV(AgateTestCase):
 
         table.to_csv('.test.csv')
 
-        with open('.test.csv') as f:
+        with open('.test.csv', encoding='utf-8') as f:
             contents1 = f.read()
 
-        with open('examples/test.csv') as f:
+        with open('examples/test.csv', encoding='utf-8') as f:
             contents2 = f.read()
 
         self.assertEqual(contents1, contents2)
@@ -57,16 +57,16 @@ class TestToCSV(AgateTestCase):
     def test_to_csv_file_like_object(self):
         table = Table(self.rows, self.column_names, self.column_types)
 
-        with open('.test.csv', 'w') as f:
+        with open('.test.csv', 'w', encoding='utf-8') as f:
             table.to_csv(f)
 
             # Should leave the file open
             self.assertFalse(f.closed)
 
-        with open('.test.csv') as f:
+        with open('.test.csv', encoding='utf-8') as f:
             contents1 = f.read()
 
-        with open('examples/test.csv') as f:
+        with open('examples/test.csv', encoding='utf-8') as f:
             contents2 = f.read()
 
         self.assertEqual(contents1, contents2)
@@ -81,7 +81,7 @@ class TestToCSV(AgateTestCase):
 
         contents1 = output.getvalue()
 
-        with open('examples/test.csv') as f:
+        with open('examples/test.csv', encoding='utf-8') as f:
             contents2 = f.read()
 
         self.assertEqual(contents1, contents2)
@@ -91,10 +91,10 @@ class TestToCSV(AgateTestCase):
 
         table.to_csv('newdir/test.csv')
 
-        with open('newdir/test.csv') as f:
+        with open('newdir/test.csv', encoding='utf-8') as f:
             contents1 = f.read()
 
-        with open('examples/test.csv') as f:
+        with open('examples/test.csv', encoding='utf-8') as f:
             contents2 = f.read()
 
         self.assertEqual(contents1, contents2)
@@ -113,7 +113,7 @@ class TestToCSV(AgateTestCase):
 
             contents1 = sys.stdout.getvalue()
 
-            with open('examples/test.csv') as f:
+            with open('examples/test.csv', encoding='utf-8') as f:
                 contents2 = f.read()
 
             self.assertEqual(contents1, contents2)

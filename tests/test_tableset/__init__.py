@@ -103,10 +103,10 @@ class TestTableSet(AgateTestCase):
         tableset.to_csv('.test-tableset')
 
         for name in ['table1', 'table2', 'table3']:
-            with open('.test-tableset/%s.csv' % name) as f:
+            with open('.test-tableset/%s.csv' % name, encoding='utf-8') as f:
                 contents1 = f.read()
 
-            with open('examples/tableset/%s.csv' % name) as f:
+            with open('examples/tableset/%s.csv' % name, encoding='utf-8') as f:
                 contents2 = f.read()
 
             self.assertEqual(contents1, contents2)
@@ -134,7 +134,7 @@ class TestTableSet(AgateTestCase):
         tableset1 = TableSet(self.tables.values(), self.tables.keys())
         tableset2 = TableSet.from_json('examples/test_tableset.json')
 
-        with open('examples/test_tableset.json') as f:
+        with open('examples/test_tableset.json', encoding='utf-8') as f:
             filelike = StringIO(f.read())
 
         tableset3 = TableSet.from_json(filelike)
@@ -166,10 +166,10 @@ class TestTableSet(AgateTestCase):
         tableset.to_json('.test-tableset')
 
         for name in ['table1', 'table2', 'table3']:
-            with open('.test-tableset/%s.json' % name) as f:
+            with open('.test-tableset/%s.json' % name, encoding='utf-8') as f:
                 contents1 = json.load(f)
 
-            with open('examples/tableset/%s.json' % name) as f:
+            with open('examples/tableset/%s.json' % name, encoding='utf-8') as f:
                 contents2 = json.load(f)
 
             self.assertEqual(contents1, contents2)
@@ -185,10 +185,10 @@ class TestTableSet(AgateTestCase):
 
         contents1 = json.loads(output.getvalue())
 
-        with open('.test-tableset/tableset.json') as f:
+        with open('.test-tableset/tableset.json', encoding='utf-8') as f:
             contents2 = json.load(f)
 
-        with open('examples/test_tableset.json') as f:
+        with open('examples/test_tableset.json', encoding='utf-8') as f:
             contents3 = json.load(f)
 
         self.assertEqual(contents1, contents3)
